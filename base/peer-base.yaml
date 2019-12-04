@@ -25,7 +25,7 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       # Metrics section
       # metrics provider is one of statsd, prometheus, or disabled
-      - CORE_METRICS_PROVIDER=${METRICS_PROVIDER}
+      - CORE_METRICS_PROVIDER=prometheus
       # network type: tcp or udp
       - CORE_METRICS_STATSD_NETWORK=udp
       - CORE_METRICS_STATSD_ADDRESS=graphite:8125
@@ -62,7 +62,7 @@ services:
       - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       # Metrics section
       # metrics provider is one of statsd, prometheus, or disabled
-      - ORDERER_METRICS_PROVIDER=${METRICS_PROVIDER}
+      - ORDERER_METRICS_PROVIDER=prometheus
       # network type: tcp or udp
       - ORDERER_METRICS_STATSD_NETWORK=udp
       - ORDERER_METRICS_STATSD_ADDRESS=graphite:8125
