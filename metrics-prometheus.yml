@@ -1,0 +1,39 @@
+version: '2'
+
+volumes:
+  prometheus-storage:
+  grafana-storage:
+
+networks:
+  metrics:
+    external:
+      name: monitor_byfn
+
+services:
+  # prometheus will pull metrics from fabric
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    hostname: prometheus
+    restart: always
+    tty: true
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-storage:/prometheus
+    ports:
+      - 9090:9090
+    networks:
+      - metrics
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - metrics
+    depends_on:
+      - prometheus
