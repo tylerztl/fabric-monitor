@@ -29,6 +29,9 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     hostname: grafana
+    environment:
+      - GF_AUTH_PROXY_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
     volumes:
       - ./config/grafana_conf/hyperledger-fabric-monitoring-for-1.4.json:/var/lib/grafana/dashboards/dashboard.json
       - ./config/grafana_conf/provisioning:/etc/grafana/provisioning
