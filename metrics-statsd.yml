@@ -1,0 +1,48 @@
+version: '2'
+
+volumes:
+  graphite-conf:
+  graphite-storage:
+  graphite-statsd:
+  grafana-storage:
+
+networks:
+  byfn:
+
+services:
+  graphite:
+    image: graphiteapp/graphite-statsd:latest
+    container_name: graphite
+    hostname: graphite
+    restart: always
+    tty: true
+    volumes:
+      - graphite-conf:/opt/graphite/conf
+      - graphite-storage:/opt/graphite/storage
+      - graphite-statsd:/opt/statsd
+    ports:
+      - 80:80
+      - 2003-2004:2003-2004
+      - 2023-2024:2023-2024
+      - 8125:8125/udp
+      - 8126:8126
+    networks:
+      - byfn
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    environment:docker
+      - GF_AUTH_PROXY_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+    volumes:
+      - ./config/grafana_conf/hyperledger-fabric-monitoring-for-1.4.json:/var/lib/grafana/dashboards/dashboard.json
+      - ./config/grafana_conf/provisioning:/etc/grafana/provisioning
+      - grafana-storage:/var/lib/grafana
+    ports:
+      - 3000:3000
+    networks:
+      - byfn
+    depends_on:
+      - graphite
